@@ -1,12 +1,24 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
-import { log } from "./vite";
 import path from "path";
-import { fileURLToPath } from "url";
 import fs from "fs";
 
-// Fix for import.meta.dirname in production
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Production logging function
+function log(message: string, source = "express") {
+  const formattedTime = new Date().toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
+  console.log(`${formattedTime} [${source}] ${message}`);
+}
+
+// Get current directory for production
+const getCurrentDir = () => {
+  // In production, we're running from /app/dist/
+  return '/app';
+};
 
 const app = express();
 app.use(express.json());
@@ -44,7 +56,7 @@ app.use((req, res, next) => {
 
 // Production static file serving
 function serveStatic(app: express.Express) {
-  const distPath = path.resolve(__dirname, "..", "dist", "public");
+  const distPath = path.join(getCurrentDir(), "dist", "public");
 
   if (!fs.existsSync(distPath)) {
     throw new Error(
@@ -56,7 +68,7 @@ function serveStatic(app: express.Express) {
 
   // fall through to index.html if the file doesn't exist
   app.use("*", (_req, res) => {
-    res.sendFile(path.resolve(distPath, "index.html"));
+    res.sendFile(path.join(distPath, "index.html"));
   });
 }
 
