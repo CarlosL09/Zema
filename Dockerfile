@@ -16,8 +16,8 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Build bundled production server that includes all dependencies
-RUN npx esbuild server/simple-production.js --platform=node --packages=external --bundle --format=esm --outfile=dist/server.js --allow-overwrite
+# Copy the standalone production server
+COPY server/standalone-production.js dist/server.js
 
 # Install production dependencies but keep vite for server
 RUN npm install --production && npm install vite && npm cache clean --force
@@ -26,4 +26,4 @@ RUN npm install --production && npm install vite && npm cache clean --force
 EXPOSE 5000
 
 # Start the application using production server
-CMD ["node", "dist/production.js"]
+CMD ["node", "dist/server.js"]
