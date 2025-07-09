@@ -1,0 +1,22 @@
+<button data-replit-metadata="client/src/pages/user-dashboard-v2.tsx:1112:28" data-component-name="Button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
+Open in Elements
+Request
+https://82b16adc-0403-4286-bb03-1abdacc93de4-00-w4fcbngqma3u.spock.replit.dev/dashboard
+Further Reading
+Learn more about this axe rule at Deque University
+Learn why this is important and how to fix it on webhint.io
+<button data-replit-metadata="client/src/pages/user-dashboard-v2.tsx:1112:28" data-component-name="Button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
+Open in Elements
+Request
+https://82b16adc-0403-4286-bb03-1abdacc93de4-00-w4fcbngqma3u.spock.replit.dev/dashboard
+Further Reading
+Learn more about this axe rule at Deque University
+Learn why this is important and how to fix it on webhint.io
+Compatibility
+'-webkit-text-size-adjust' is not supported by Chrome, Chrome Android, Edge 79+, Firefox, Safari. Add 'text-size-adjust' to support Chrome 54+, Chrome Android 54+, Edge 79+.
+The 'viewport' meta element 'content' attribute value should not contain 'maximum-scale'.
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+Open in Elements
+Request
+https://82b16adc-0403-4286-bb03-1abdacc93de4-00-w4fcbngqma3u.spock.replit.dev/dashboard
+Further Reading
