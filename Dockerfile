@@ -16,8 +16,8 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Build production server with proper dirname handling
-RUN npx esbuild server/production.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/production.js
+# Build bundled production server that includes all dependencies
+RUN npx esbuild server/simple-production.js --platform=node --packages=external --bundle --format=esm --outfile=dist/server.js --allow-overwrite
 
 # Install production dependencies but keep vite for server
 RUN npm install --production && npm install vite && npm cache clean --force
