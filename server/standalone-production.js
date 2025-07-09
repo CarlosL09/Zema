@@ -72,8 +72,8 @@ app.get("/api/status", (req, res) => {
 
 // Simple static file serving for production
 function serveStatic(app) {
-  // In Docker, we're in /app, static files are in /app/dist/public
-  const distPath = "/app/dist/public";
+  // In Docker, we're in /zema-app, static files are in /zema-app/dist/public
+  const distPath = "/zema-app/dist/public";
 
   if (!fs.existsSync(distPath)) {
     log(`Warning: Build directory not found at ${distPath}`);

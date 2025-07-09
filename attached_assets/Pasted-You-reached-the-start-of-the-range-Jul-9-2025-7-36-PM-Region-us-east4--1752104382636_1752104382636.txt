@@ -1,0 +1,100 @@
+You reached the start of the range → Jul 9, 2025, 7:36 PM
+
+ 
+
+[Region: us-east4]
+
+=========================
+
+Using Detected Dockerfile
+
+=========================
+
+
+context: 1rm0-yJme
+
+[internal] load build definition from Dockerfile
+
+[internal] load build definition from Dockerfile
+
+[internal] load build definition from Dockerfile  ✔ 0 ms
+
+[internal] load build definition from Dockerfile
+
+[internal] load build definition from Dockerfile  ✔ 12 ms
+
+[internal] load metadata for docker.io/library/node:18-alpine
+
+[internal] load metadata for docker.io/library/node:18-alpine  ✔ 81 ms
+
+[internal] load .dockerignore
+
+[internal] load .dockerignore  ✔ 0 ms
+
+[internal] load .dockerignore
+
+[internal] load .dockerignore  ✔ 11 ms
+
+[8/8] RUN npm install --production && npm install vite && npm cache clean --force
+
+[7/8] RUN npx esbuild server/simple-production.js --platform=node --packages=external --bundle --format=esm --outfile=dist/server.js --allow-overwrite
+
+[6/8] RUN npm run build
+
+[5/8] COPY . .
+
+[4/8] RUN npm ci --include=dev
+
+[3/8] COPY package*.json ./
+
+[internal] load build context
+
+[2/8] WORKDIR /app
+
+[1/8] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
+
+[1/8] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
+
+[internal] load build context
+
+[internal] load build context  ✔ 0 ms
+
+[1/8] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e  ✔ 5 ms
+
+[internal] load build context
+
+[internal] load build context  ✔ 151 ms
+
+[2/8] WORKDIR /app  ✔ 0 ms – CACHED
+
+[3/8] COPY package*.json ./  ✔ 0 ms – CACHED
+
+[4/8] RUN npm ci --include=dev  ✔ 0 ms – CACHED
+
+[5/8] COPY . .  ✔ 0 ms – CACHED
+
+[6/8] RUN npm run build  ✔ 0 ms – CACHED
+
+[7/8] RUN npx esbuild server/simple-production.js --platform=node --packages=external --bundle --format=esm --outfile=dist/server.js --allow-overwrite  ✔ 0 ms – CACHED
+
+[8/8] RUN npm install --production && npm install vite && npm cache clean --force  ✔ 0 ms – CACHED
+
+exporting to docker image format
+
+exporting to image
+
+[auth] sharing credentials for production-us-east4-eqdc4a.railway-registry.com
+
+[auth] sharing credentials for production-us-east4-eqdc4a.railway-registry.com  ✔ 0 ms
+
+importing to docker
+
+importing to docker  ✔ 12 sec
+
+Build time: 15.89 seconds
+
+ 
+
+====================
+
+Starting Healthcheck
