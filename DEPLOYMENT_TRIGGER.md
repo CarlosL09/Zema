@@ -2,7 +2,7 @@
 
 This file forces Railway to rebuild without using cached layers.
 
-**Build Timestamp**: 2025-01-09 19:37 UTC
+**Build Timestamp**: 2025-01-09 19:48 UTC
 **Trigger Reason**: Force rebuild with new Dockerfile structure
 **Changes**: 
 - New working directory `/zema-app`

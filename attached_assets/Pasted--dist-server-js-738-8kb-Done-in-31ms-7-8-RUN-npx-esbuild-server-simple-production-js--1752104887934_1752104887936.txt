@@ -1,0 +1,104 @@
+
+  dist/server.js  738.8kb
+
+⚡ Done in 31ms
+
+[7/8] RUN npx esbuild server/simple-production.js --platform=node --packages=external --bundle --format=esm --outfile=dist/server.js --allow-overwrite  ✔ 780 ms
+
+[8/8] RUN npm install --production && npm install vite && npm cache clean --force
+
+npm warn config production Use `--omit=dev` instead.
+
+
+up to date, audited 528 packages in 2s
+
+
+
+64 packages are looking for funding
+
+  run `npm fund` for details
+
+
+1 low severity vulnerability
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+
+npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+
+npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+
+
+added 108 packages, and audited 636 packages in 5s
+
+
+
+76 packages are looking for funding
+
+  run `npm fund` for details
+
+
+9 vulnerabilities (1 low, 8 moderate)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+npm warn using --force Recommended protections disabled.
+
+[8/8] RUN npm install --production && npm install vite && npm cache clean --force  ✔ 8 sec
+
+exporting to docker image format
+
+exporting to image
+
+importing to docker
+
+[auth] sharing credentials for production-us-east4-eqdc4a.railway-registry.com
+
+[auth] sharing credentials for production-us-east4-eqdc4a.railway-registry.com  ✔ 0 ms
+
+importing to docker  ✔ 12 sec
+
+Build time: 95.42 seconds
+
+ 
+
+====================
+
+Starting Healthcheck
+
+====================
+
+
+Path: /
+
+Retry window: 1m40s
+
+ 
+
+Attempt #1 failed with service unavailable. Continuing to retry for 1m32s
+
+Attempt #2 failed with service unavailable. Continuing to retry for 1m27s
+
+Attempt #3 failed with service unavailable. Continuing to retry for 1m15s
+
+Attempt #4 failed with service unavailable. Continuing to retry for 1m1s
+
+Attempt #5 failed with service unavailable. Continuing to retry for 52s
+
+Attempt #6 failed with service unavailable. Continuing to retry for 36s
+
+Attempt #7 failed with service unavailable. Continuing to retry for 6s
+
+ 
+
+1/1 replicas never became healthy!
+
+Healthcheck failed!
