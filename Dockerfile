@@ -16,8 +16,8 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Remove dev dependencies after build
-RUN npm ci --only=production && npm cache clean --force
+# Install production dependencies but keep vite for server
+RUN npm install --production && npm install vite && npm cache clean --force
 
 # Expose port
 EXPOSE 5000
