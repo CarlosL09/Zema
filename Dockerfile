@@ -16,11 +16,14 @@ COPY . .
 # Build the application
 RUN npm run build
 
+# Build production server with proper dirname handling
+RUN npx esbuild server/production.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/production.js
+
 # Install production dependencies but keep vite for server
 RUN npm install --production && npm install vite && npm cache clean --force
 
 # Expose port
 EXPOSE 5000
 
-# Start the application
-CMD ["npm", "run", "start"]
+# Start the application using production server
+CMD ["node", "dist/production.js"]
