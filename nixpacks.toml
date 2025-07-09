@@ -2,7 +2,7 @@
 nixPkgs = ['nodejs-18_x', 'npm-9_x']
 
 [phases.install]
-cmd = 'npm ci --include=dev'
+cmd = 'npm ci --include=dev && npm install vite esbuild @vitejs/plugin-react autoprefixer postcss tailwindcss typescript --save'
 
 [phases.build]
 cmd = 'npm run build'
