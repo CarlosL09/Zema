@@ -1,0 +1,193 @@
+Activity
+
+
+Zema
+Deployments
+Variables
+Metrics
+Settings
+Unexposed service
+us-east4-eqdc4a
+1 Replica
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+History
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Zema
+/
+7bef7eb
+Jul 9, 2025, 10:38 AM
+Failed
+
+Get Help
+
+Details
+Build Logs
+Deploy Logs
+
+Filter
+Filter logs using "", (), AND, OR, -
+
+
+
+You reached the start of the range → Jul 9, 2025, 10:38 AM
+
+Starting Container
+
+ 
+
+> rest-express@1.0.0 start
+
+> NODE_ENV=production node dist/index.js
+
+ 
+
+file:///app/dist/index.js:6442
+
+  throw new Error("Environment variable REPLIT_DOMAINS not provided");
+
+        ^
+
+ 
+
+Error: Environment variable REPLIT_DOMAINS not provided
+
+    at file:///app/dist/index.js:6442:9
+
+    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+
+    at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+
+    at async loadESM (node:internal/process/esm_loader:34:7)
+
+    at async handleMainPromise (node:internal/modules/run_main:106:12)
+
+ 
+
+Node.js v18.20.8
+
+ 
+
+> rest-express@1.0.0 start
+
+> NODE_ENV=production node dist/index.js
+
+ 
+
+file:///app/dist/index.js:6442
+
+  throw new Error("Environment variable REPLIT_DOMAINS not provided");
+
+        ^
+
+ 
+
+Error: Environment variable REPLIT_DOMAINS not provided
+
+    at file:///app/dist/index.js:6442:9
+
+    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+
+    at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+
+    at async loadESM (node:internal/process/esm_loader:34:7)
+
+    at async handleMainPromise (node:internal/modules/run_main:106:12)
+
+ 
+
+Node.js v18.20.8
+
+ 
+
+> rest-express@1.0.0 start
+
+> NODE_ENV=production node dist/index.js
+
+ 
+
+file:///app/dist/index.js:6442
+
+  throw new Error("Environment variable REPLIT_DOMAINS not provided");
+
+        ^
+
+ 
+
+Error: Environment variable REPLIT_DOMAINS not provided
+
+    at file:///app/dist/index.js:6442:9
+
+    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+
+    at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+
+    at async loadESM (node:internal/process/esm_loader:34:7)
+
+    at async handleMainPromise (node:internal/modules/run_main:106:12)
+
+ 
+
+Node.js v18.20.8
+
+ 
+
+> rest-express@1.0.0 start
+
+> NODE_ENV=production node dist/index.js
+
+ 
+
+file:///app/dist/index.js:6442
+
+  throw new Error("Environment variable REPLIT_DOMAINS not provided");
+
+        ^
+
+ 
+
+Error: Environment variable REPLIT_DOMAINS not provided
+
+    at file:///app/dist/index.js:6442:9
+
+    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+
+    at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
