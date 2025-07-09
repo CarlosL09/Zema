@@ -1,0 +1,123 @@
+You reached the start of the range → Jul 9, 2025, 9:09 AM
+
+Starting Container
+
+ 
+
+> rest-express@1.0.0 start
+
+> NODE_ENV=production node dist/index.js
+
+ 
+
+file:///app/dist/index.js:1486
+
+      throw new Error(
+
+            ^
+
+ 
+
+Error: DATABASE_URL must be set. Did you forget to provision a database?
+
+    at server/db.ts (file:///app/dist/index.js:1486:13)
+
+    at __init (file:///app/dist/index.js:6:56)
+
+    at server/storage.ts (file:///app/dist/index.js:1503:5)
+
+    at __init (file:///app/dist/index.js:6:56)
+
+    at file:///app/dist/index.js:6429:1
+
+    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+
+    at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+
+    at async loadESM (node:internal/process/esm_loader:34:7)
+
+    at async handleMainPromise (node:internal/modules/run_main:106:12)
+
+ 
+
+Node.js v18.20.8
+
+ 
+
+> rest-express@1.0.0 start
+
+> NODE_ENV=production node dist/index.js
+
+ 
+
+file:///app/dist/index.js:1486
+
+      throw new Error(
+
+            ^
+
+ 
+
+Error: DATABASE_URL must be set. Did you forget to provision a database?
+
+    at server/db.ts (file:///app/dist/index.js:1486:13)
+
+    at __init (file:///app/dist/index.js:6:56)
+
+    at server/storage.ts (file:///app/dist/index.js:1503:5)
+
+    at __init (file:///app/dist/index.js:6:56)
+
+    at file:///app/dist/index.js:6429:1
+
+    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+
+    at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+
+    at async loadESM (node:internal/process/esm_loader:34:7)
+
+    at async handleMainPromise (node:internal/modules/run_main:106:12)
+
+ 
+
+Node.js v18.20.8
+
+ 
+
+> rest-express@1.0.0 start
+
+> NODE_ENV=production node dist/index.js
+
+ 
+
+file:///app/dist/index.js:1486
+
+      throw new Error(
+
+            ^
+
+ 
+
+Error: DATABASE_URL must be set. Did you forget to provision a database?
+
+    at server/db.ts (file:///app/dist/index.js:1486:13)
+
+    at __init (file:///app/dist/index.js:6:56)
+
+    at server/storage.ts (file:///app/dist/index.js:1503:5)
+
+    at __init (file:///app/dist/index.js:6:56)
+
+    at file:///app/dist/index.js:6429:1
+
+    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+
+    at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+
+    at async loadESM (node:internal/process/esm_loader:34:7)
+
+    at async handleMainPromise (node:internal/modules/run_main:106:12)
+
+ 
+
+Node.js v18.20.8
