@@ -1,46 +1,34 @@
-# ZEMA Production Build - No Cache Version
-FROM node:18-alpine
+# FORCE REBUILD - New timestamp: 2025-01-11-17:33
+FROM node:18-slim
 
-# Install system dependencies
-RUN apk add --no-cache dumb-init curl
+# Install curl for health checks
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
-WORKDIR /zema
+# Create app directory with different name to break cache
+WORKDIR /zema-prod
 
-# Copy package files
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install all dependencies
-RUN npm ci --include=dev
+# Install dependencies
+RUN npm ci --only=production
 
-# Copy source code
+# Copy source and build frontend
 COPY . .
-
-# Build frontend
 RUN npm run build
 
-# Copy standalone server directly (no bundling)
-COPY server/standalone-production.js ./dist/app.js
+# Copy the direct production server (CommonJS, no imports)
+COPY server/direct-production.js ./server.js
 
-# Update paths in server for new structure
-RUN sed -i 's|/zema-app/dist/public|/zema/dist/public|g' ./dist/app.js
-
-# Install production dependencies only
-RUN npm prune --production
-
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs && adduser -S zema -u 1001
-RUN chown -R zema:nodejs /zema
-
-# Switch to non-root user
-USER zema
+# Create a simple startup script
+RUN echo '#!/bin/sh\nnode server.js' > start.sh && chmod +x start.sh
 
 # Expose port
 EXPOSE 5000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+# Simple health check
+HEALTHCHECK --interval=10s --timeout=3s --start-period=30s --retries=3 \
   CMD curl -f http://localhost:5000/ || exit 1
 
-# Start server
-CMD ["dumb-init", "node", "dist/app.js"]
+# Start the server
+CMD ["./start.sh"]

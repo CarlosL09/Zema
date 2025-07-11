@@ -2,12 +2,13 @@
 
 This file forces Railway to rebuild without using cached layers.
 
-**Build Timestamp**: 2025-01-09 19:48 UTC
-**Trigger Reason**: Force rebuild with new Dockerfile structure
+**Build Timestamp**: 2025-01-11 21:38 UTC
+**Trigger Reason**: FORCE COMPLETE CACHE BREAK
 **Changes**: 
-- New working directory `/zema-app`
-- Standalone production server at `dist/production-server.js`
-- No esbuild bundling - direct file copy
-- Added security hardening with non-root user
+- Changed base image from node:18-alpine to node:18-slim
+- New working directory `/zema-prod` 
+- CommonJS server (server/direct-production.js) - no ES modules
+- Startup script approach with ./start.sh
+- Simplified build process with built-in frontend build
 
-**Expected Result**: Successful deployment with health checks passing
+**Expected Result**: Complete cache break and successful deployment
