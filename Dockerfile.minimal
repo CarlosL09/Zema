@@ -1,0 +1,26 @@
+# Minimal working Dockerfile for Railway
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --production
+
+# Copy only essential files
+COPY server/direct-production.cjs ./server.cjs
+COPY dist/ ./dist/
+
+# Create minimal health check
+RUN echo '#!/bin/sh\ncurl -f http://localhost:${PORT:-3000}/ || exit 1' > /usr/local/bin/healthcheck && chmod +x /usr/local/bin/healthcheck
+
+# Expose port
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=10s --timeout=3s --start-period=30s --retries=3 CMD /usr/local/bin/healthcheck
+
+# Start server
+CMD ["node", "server.cjs"]

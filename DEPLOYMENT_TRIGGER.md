@@ -2,13 +2,14 @@
 
 This file forces Railway to rebuild without using cached layers.
 
-**Build Timestamp**: 2025-01-11 21:45 UTC
-**Trigger Reason**: FIXED ES MODULE CONFLICT
+**Build Timestamp**: 2025-01-11 21:54 UTC
+**Trigger Reason**: MINIMAL DOCKERFILE - NO BUILD COMPLEXITY
 **Changes**: 
-- Fixed CommonJS/ES module conflict by renaming server to .cjs extension
-- Server tested locally and responds correctly to health checks
-- Updated Dockerfile and railway.json to use server.cjs
-- Health check endpoint returns proper JSON response
-- Server binds to 0.0.0.0 and uses Railway's PORT environment variable
+- Replaced complex Dockerfile with minimal approach
+- Skips npm run build step that was causing issues
+- Uses pre-built static files from dist/ folder
+- Server tested locally: responds at / and /api/health endpoints
+- Simple alpine image with only production dependencies
+- Direct node server.cjs startup
 
-**Expected Result**: Successful deployment with passing health checks
+**Expected Result**: Fast, reliable deployment without build failures

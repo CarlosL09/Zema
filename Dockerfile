@@ -1,34 +1,27 @@
-# FORCE REBUILD - New timestamp: 2025-01-11-17:33
-FROM node:18-slim
+# Minimal Railway Dockerfile - Skip complex build
+FROM node:18-alpine
+
+WORKDIR /app
 
 # Install curl for health checks
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache curl
 
-# Create app directory with different name to break cache
-WORKDIR /zema-prod
-
-# Copy package.json and package-lock.json
+# Copy package files and install production dependencies only
 COPY package*.json ./
+RUN npm ci --production
 
-# Install all dependencies (need dev for build)
-RUN npm ci
-
-# Copy source and build frontend
-COPY . .
-RUN npm run build
-
-# Clean up dev dependencies after build
-RUN npm prune --production
-
-# Copy the direct production server (CommonJS, no imports)
+# Copy the working CommonJS server
 COPY server/direct-production.cjs ./server.cjs
 
-# Expose port (Railway will provide the actual port)
+# Copy pre-built static files
+COPY dist/ ./dist/
+
+# Expose port
 EXPOSE 3000
 
-# Simple health check
+# Health check
 HEALTHCHECK --interval=10s --timeout=3s --start-period=30s --retries=3 \
   CMD curl -f http://localhost:${PORT:-3000}/ || exit 1
 
-# Start the server directly
+# Start server
 CMD ["node", "server.cjs"]
