@@ -1,44 +1,46 @@
-# ZEMA Production Dockerfile - Complete rebuild required
+# ZEMA Production Build - No Cache Version
 FROM node:18-alpine
 
-# Install additional utilities
-RUN apk add --no-cache dumb-init
+# Install system dependencies
+RUN apk add --no-cache dumb-init curl
 
-# Create app directory
-WORKDIR /zema-app
+# Set working directory
+WORKDIR /zema
 
-# Copy package files first for better caching
+# Copy package files
 COPY package*.json ./
 
-# Install dependencies including dev for build
-RUN npm ci --include=dev --silent
+# Install all dependencies
+RUN npm ci --include=dev
 
-# Copy all source files
+# Copy source code
 COPY . .
 
-# Build the React frontend
+# Build frontend
 RUN npm run build
 
-# Create standalone production server directly
-RUN cp server/standalone-production.js dist/production-server.js
+# Copy standalone server directly (no bundling)
+COPY server/standalone-production.js ./dist/app.js
 
-# Clean up and install only production deps
-RUN npm prune --production && npm cache clean --force
+# Update paths in server for new structure
+RUN sed -i 's|/zema-app/dist/public|/zema/dist/public|g' ./dist/app.js
+
+# Install production dependencies only
+RUN npm prune --production
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && adduser -S zema -u 1001
-
-# Change ownership of app directory
-RUN chown -R zema:nodejs /zema-app
+RUN chown -R zema:nodejs /zema
 
 # Switch to non-root user
 USER zema
 
-# Expose the port
+# Expose port
 EXPOSE 5000
 
-# Use dumb-init for proper signal handling
-ENTRYPOINT ["dumb-init", "--"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:5000/ || exit 1
 
-# Start the production server
-CMD ["node", "dist/production-server.js"]
+# Start server
+CMD ["dumb-init", "node", "dist/app.js"]
