@@ -10,25 +10,25 @@ WORKDIR /zema-prod
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install all dependencies (need dev for build)
+RUN npm ci
 
 # Copy source and build frontend
 COPY . .
 RUN npm run build
 
+# Clean up dev dependencies after build
+RUN npm prune --production
+
 # Copy the direct production server (CommonJS, no imports)
 COPY server/direct-production.js ./server.js
 
-# Create a simple startup script
-RUN echo '#!/bin/sh\nnode server.js' > start.sh && chmod +x start.sh
-
-# Expose port
-EXPOSE 5000
+# Expose port (Railway will provide the actual port)
+EXPOSE 3000
 
 # Simple health check
 HEALTHCHECK --interval=10s --timeout=3s --start-period=30s --retries=3 \
-  CMD curl -f http://localhost:5000/ || exit 1
+  CMD curl -f http://localhost:${PORT:-3000}/ || exit 1
 
-# Start the server
-CMD ["./start.sh"]
+# Start the server directly
+CMD ["node", "server.js"]

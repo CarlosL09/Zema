@@ -72,10 +72,19 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-// Start server
-const port = process.env.PORT || 5000;
-app.listen(port, "0.0.0.0", () => {
+// Start server - Railway requires PORT env var and 0.0.0.0 binding
+const port = process.env.PORT || 3000;
+const server = app.listen(port, "0.0.0.0", () => {
   log(`ZEMA serving on port ${port}`);
   log(`Environment: ${process.env.NODE_ENV || "production"}`);
-  log(`Health check: http://localhost:${port}/`);
+  log(`Health check: http://0.0.0.0:${port}/`);
+  log(`Server ready for Railway health checks`);
+});
+
+// Handle graceful shutdown
+process.on('SIGTERM', () => {
+  log('SIGTERM received, shutting down gracefully');
+  server.close(() => {
+    log('Process terminated');
+  });
 });

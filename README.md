@@ -1,6 +1,6 @@
 # ZEMA - Zero Effort Mail Automation
 
-*Railway deployment update - production Dockerfile replaced - Build timestamp: 2025-01-09 21:30*
+*Railway production deployment - Fixed server configuration for Railway - Build: 2025-01-11 21:45*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
