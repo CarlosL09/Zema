@@ -2,7 +2,7 @@
 
 This file forces Railway to rebuild without using cached layers.
 
-**Build Timestamp**: 2025-01-11 21:43 UTC
+**Build Timestamp**: 2025-01-11 21:45 UTC
 **Trigger Reason**: FIXED ES MODULE CONFLICT
 **Changes**: 
 - Fixed CommonJS/ES module conflict by renaming server to .cjs extension
