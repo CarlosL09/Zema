@@ -1,4 +1,4 @@
-# Minimal Railway Dockerfile - Skip complex build
+# Minimal Railway Dockerfile - Self-contained
 FROM node:18-alpine
 
 WORKDIR /app
@@ -13,8 +13,7 @@ RUN npm ci --production
 # Copy the working CommonJS server
 COPY server/direct-production.cjs ./server.cjs
 
-# Copy pre-built static files
-COPY dist/ ./dist/
+# Server handles missing static files gracefully with built-in fallback
 
 # Expose port
 EXPOSE 3000
