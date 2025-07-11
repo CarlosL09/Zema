@@ -2,7 +2,7 @@
 
 This file forces Railway to rebuild without using cached layers.
 
-**Build Timestamp**: 2025-01-11 21:54 UTC
+**Build Timestamp**: 2025-01-11 22:01 UTC
 **Trigger Reason**: MINIMAL DOCKERFILE - NO BUILD COMPLEXITY
 **Changes**: 
 - Replaced complex Dockerfile with minimal approach
