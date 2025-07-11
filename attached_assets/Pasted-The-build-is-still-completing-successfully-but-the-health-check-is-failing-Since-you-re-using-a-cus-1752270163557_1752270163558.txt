@@ -1,0 +1,77 @@
+The build is still completing successfully but the health check is failing. Since you're using a custom Dockerfile and the cached build is very fast, the issue is definitely in your server configuration.
+
+Here's what you need to check:
+
+## 1. **Check Your Dockerfile CMD/ENTRYPOINT**
+Make sure your Dockerfile ends with the correct command to start your server:
+
+```dockerfile
+# Add this at the end of your Dockerfile
+CMD ["node", "dist/server.js"]
+```
+
+## 2. **Verify Your Server File**
+Check your `dist/server.js` or `server/simple-production.js` file. It should:
+
+```javascript
+// Make sure it listens on Railway's PORT
+const PORT = process.env.PORT || 3000;
+
+// Bind to 0.0.0.0, not localhost
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+});
+```
+
+## 3. **Check Railway Service Settings**
+1. Go to your Railway service dashboard
+2. Click on "Settings"
+3. Under "Networking", verify:
+   - **Port**: Should match what your app listens on (usually from `process.env.PORT`)
+   - **Health Check Path**: Should be `/` (or change your app to respond to this path)
+
+## 4. **Add a Health Check Route**
+Ensure your server responds to the root path:
+
+```javascript
+app.get('/', (req, res) => {
+  res.status(200).send('OK');
+});
+
+// Or if you're using Express with other routes
+app.get('/', (req, res) => {
+  res.json({ status: 'healthy', timestamp: new Date().toISOString() });
+});
+```
+
+## 5. **Check Application Logs**
+This is crucial - check your Railway deployment logs:
+1. Go to Railway dashboard
+2. Click on your service
+3. Click on "Deployments"
+4. Click on the failed deployment
+5. Check both "Deploy Logs" and "App Logs"
+
+The App Logs will show you exactly why your server isn't starting or responding.
+
+## 6. **Test Your Built Server Locally**
+Since you're using esbuild, test the exact file Railway is trying to run:
+
+```bash
+# Build your project
+npm run build
+npx esbuild server/simple-production.js --platform=node --packages=external --bundle --format=esm --outfile=dist/server.js --allow-overwrite
+
+# Test the built server
+PORT=3000 node dist/server.js
+```
+
+Then visit `http://localhost:3000` to see if it responds.
+
+## 7. **Common Issues:**
+- **Missing environment variables** - Railway might need specific env vars
+- **Database connection issues** - If your app connects to a DB on startup
+- **Import/export issues** - Since you're using ESM format
+- **Async startup code** - Server might be crashing during initialization
+
+**The key is checking those Railway App Logs** - they'll tell you exactly what's going wrong when your server tries to start.

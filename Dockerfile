@@ -21,7 +21,7 @@ RUN npm run build
 RUN npm prune --production
 
 # Copy the direct production server (CommonJS, no imports)
-COPY server/direct-production.js ./server.js
+COPY server/direct-production.cjs ./server.cjs
 
 # Expose port (Railway will provide the actual port)
 EXPOSE 3000
@@ -31,4 +31,4 @@ HEALTHCHECK --interval=10s --timeout=3s --start-period=30s --retries=3 \
   CMD curl -f http://localhost:${PORT:-3000}/ || exit 1
 
 # Start the server directly
-CMD ["node", "server.js"]
+CMD ["node", "server.cjs"]
