@@ -40,6 +40,7 @@ for (const testPath of staticPaths) {
   if (fs.existsSync(testPath)) {
     staticPath = testPath;
     app.use("/assets", express.static(staticPath));
+    app.use(express.static(staticPath)); // ✅ This line enables root-level static file serving
     log(`✅ Serving static files from: ${staticPath}`);
     break;
   }
@@ -49,14 +50,13 @@ if (!staticPath) {
   log(`⚠️ No static files found. Checked: ${staticPaths.join(", ")}`);
 }
 
-// Root route - serve index.html or beautiful fallback
+// Root route - serve index.html or fallback
 app.get("/", (req, res) => {
-  // ✅ Updated: Check dist/public/index.html first
   const indexPaths = [
-    path.join(__dirname, "..", "dist", "public", "index.html"), // <-- MAIN
-    path.join(__dirname, "..", "index.html"),     
-    path.join(__dirname, "index.html"),           
-    path.join(__dirname, "public", "index.html") 
+    path.join(__dirname, "..", "dist", "public", "index.html"),
+    path.join(__dirname, "..", "index.html"),
+    path.join(__dirname, "index.html"),
+    path.join(__dirname, "public", "index.html")
   ];
   
   for (const indexPath of indexPaths) {
@@ -66,10 +66,10 @@ app.get("/", (req, res) => {
       return;
     }
   }
-  
+
   log(`⚠️ No index.html found. Checked: ${indexPaths.join(", ")}`);
-  
-  // Beautiful ZEMA landing page fallback  
+
+  // Beautiful fallback page
   res.status(200).send(`
     <!DOCTYPE html>
     <html lang="en">
@@ -79,7 +79,7 @@ app.get("/", (req, res) => {
       <title>ZEMA - Zero Effort Mail Automation</title>
       <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
+        body {
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
           background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
           color: white; min-height: 100vh;
@@ -107,8 +107,6 @@ app.get("/", (req, res) => {
           <p>Static files: ${staticPath || "Not found"}</p>
           <p>Working directory: ${__dirname}</p>
           <p>Repository root: ${path.join(__dirname, "..")}</p>
-          <p>Looking for index.html at: ${path.join(__dirname, "..", "index.html")}</p>
-          <p>Looking for assets at: ${path.join(__dirname, "..", "assets")}</p>
         </div>
         <div>
           <a href="/api/health" class="btn">Health Check</a>
@@ -126,7 +124,7 @@ app.get("/", (req, res) => {
   `);
 });
 
-// SPA fallback for all other routes  
+// SPA fallback for client-side routes
 app.get("*", (req, res) => {
   const indexPath = path.join(__dirname, "..", "dist", "public", "index.html");
   if (fs.existsSync(indexPath)) {
@@ -155,10 +153,11 @@ const server = app.listen(port, "0.0.0.0", () => {
   log(`Server ready for Railway health checks`);
 });
 
-// Handle graceful shutdown
+// Graceful shutdown
 process.on('SIGTERM', () => {
   log('SIGTERM received, shutting down gracefully');
   server.close(() => {
     log('Process terminated');
   });
 });
+
