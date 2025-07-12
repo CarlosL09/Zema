@@ -44,24 +44,88 @@ if (fs.existsSync(distPath)) {
   log(`Warning: Static files not found at ${distPath}`);
 }
 
-// Fallback for SPA routing
-app.get("*", (req, res) => {
-  const indexPath = path.join(distPath, "index.html");
-  if (fs.existsSync(indexPath)) {
-    res.sendFile(indexPath);
-  } else {
-    res.status(200).send(`
-      <html>
-        <head><title>ZEMA</title></head>
-        <body>
-          <h1>ZEMA - Zero Effort Mail Automation</h1>
-          <p>Application is running successfully!</p>
-          <p>Build directory: ${distPath}</p>
-          <p>Environment: ${process.env.NODE_ENV || "production"}</p>
-        </body>
-      </html>
-    `);
+// Serve index.html for the root route
+app.get("/", (req, res) => {
+  const possiblePaths = [
+    path.join(__dirname, "index.html"),
+    path.join(__dirname, "public", "index.html"),
+    path.join(__dirname, "..", "dist", "public", "index.html")
+  ];
+  
+  for (const indexPath of possiblePaths) {
+    if (fs.existsSync(indexPath)) {
+      log(`📄 Serving index.html from: ${indexPath}`);
+      res.sendFile(path.resolve(indexPath));
+      return;
+    }
   }
+  
+  // Beautiful fallback landing page
+  res.status(200).send(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>ZEMA - Zero Effort Mail Automation</title>
+      <style>
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          margin: 0; padding: 0;
+          background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+          color: white; min-height: 100vh;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .container { text-align: center; padding: 40px; max-width: 600px; }
+        .logo { font-size: 4rem; font-weight: bold; color: #22d3ee; margin-bottom: 20px; text-shadow: 0 0 20px rgba(34, 211, 238, 0.5); }
+        .tagline { font-size: 1.5rem; margin-bottom: 30px; color: #94a3b8; }
+        .status { background: rgba(34, 211, 238, 0.1); border: 1px solid #22d3ee; border-radius: 10px; padding: 20px; margin: 30px 0; }
+        .status h3 { color: #22d3ee; margin-top: 0; }
+        .button { background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%); color: black; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; margin: 10px; transition: transform 0.2s; }
+        .button:hover { transform: translateY(-2px); }
+        .info { margin-top: 30px; color: #64748b; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="logo">🚀 ZEMA</div>
+        <div class="tagline">Zero Effort Mail Automation</div>
+        <div class="status">
+          <h3>✅ Railway Deployment Successful!</h3>
+          <p>Your ZEMA application is running on Railway</p>
+          <p><strong>Environment:</strong> ${process.env.NODE_ENV || "production"}</p>
+          <p><strong>Port:</strong> ${process.env.PORT || 3000}</p>
+        </div>
+        <div>
+          <a href="/api/health" class="button">Health Check</a>
+        </div>
+        <div class="info">
+          <p><strong>Demo Login:</strong> demo@zema.com / demo123</p>
+          <p><strong>Admin Access:</strong> admin@zema.com / Luna0906!</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `);
+});
+
+// SPA fallback for all other routes
+app.get("*", (req, res) => {
+  const possiblePaths = [
+    path.join(__dirname, "index.html"),
+    path.join(__dirname, "public", "index.html"),
+    path.join(__dirname, "..", "dist", "public", "index.html")
+  ];
+  
+  for (const indexPath of possiblePaths) {
+    if (fs.existsSync(indexPath)) {
+      res.sendFile(path.resolve(indexPath));
+      return;
+    }
+  }
+  
+  // Redirect to home page
+  res.redirect("/");
 });
 
 // Error handling
