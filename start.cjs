@@ -26,47 +26,44 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// Static file serving - check multiple locations
-const staticPaths = [
-  path.join(__dirname, "assets"), 
-  path.join(__dirname, "public"),
-  path.join(__dirname, "..", "assets"),
-  path.join(__dirname, "..", "public"),
-  path.join(__dirname, "..", "dist", "public")
-];
+// Production API fallback (shouldn't show in browser)
+app.get("/api*", (req, res) => {
+  res.json({
+    message: "ZEMA API is running",
+    timestamp: new Date().toISOString(),
+    environment: "production",
+    version: "1.0.0"
+  });
+});
 
-let staticPath = null;
-for (const testPath of staticPaths) {
-  if (fs.existsSync(testPath)) {
-    staticPath = testPath;
-    app.use("/assets", express.static(staticPath));
-    log(`✅ Serving static files from: ${staticPath}`);
-    break;
+// Log available files for debugging
+try {
+  const files = fs.readdirSync(__dirname);
+  log(`📋 Available files in root: ${files.join(", ")}`);
+  
+  const assetsPath = path.join(__dirname, "assets");
+  if (fs.existsSync(assetsPath)) {
+    const assetFiles = fs.readdirSync(assetsPath);
+    log(`📋 Available assets: ${assetFiles.join(", ")}`);
   }
+} catch (err) {
+  log(`⚠️ Could not read directory: ${err.message}`);
 }
 
-if (!staticPath) {
-  log(`⚠️ No static files found. Checked: ${staticPaths.join(", ")}`);
-}
+// Serve static files from assets directory
+app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 // Root route - serve index.html or beautiful fallback
 app.get("/", (req, res) => {
-  // Try to serve index.html from repository root
-  const indexPaths = [
-    path.join(__dirname, "index.html"),           // Repository root (same directory as start.cjs)
-    path.join(__dirname, "public", "index.html"), // Public folder
-    path.join(__dirname, "dist", "public", "index.html") // Built version
-  ];
+  const indexPath = path.join(__dirname, "index.html");
   
-  for (const indexPath of indexPaths) {
-    if (fs.existsSync(indexPath)) {
-      log(`📄 Serving React app from: ${indexPath}`);
-      res.sendFile(path.resolve(indexPath));
-      return;
-    }
+  if (fs.existsSync(indexPath)) {
+    log(`📄 Serving React app from: ${indexPath}`);
+    res.sendFile(path.resolve(indexPath));
+    return;
   }
   
-  log(`⚠️ No index.html found. Checked: ${indexPaths.join(", ")}`);
+  log(`⚠️ No index.html found at: ${indexPath}`);
   
   // Beautiful ZEMA landing page fallback  
   res.status(200).send(`
@@ -206,12 +203,4 @@ app.listen(PORT, "0.0.0.0", () => {
   log(`🚀 ZEMA Server running on port ${PORT}`);
   log(`🌐 Environment: ${process.env.NODE_ENV || "production"}`);
   log(`📁 Serving from: ${__dirname}`);
-  
-  // Log available files for debugging
-  try {
-    const files = fs.readdirSync(__dirname);
-    log(`📋 Available files: ${files.join(", ")}`);
-  } catch (err) {
-    log(`⚠️ Could not read directory: ${err.message}`);
-  }
 });
