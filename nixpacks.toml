@@ -1,11 +1,11 @@
-[phases.setup]
-nixPkgs = ['nodejs-18_x', 'npm-9_x']
-
-[phases.install]
-cmd = 'npm ci --include=dev && npm install vite esbuild @vitejs/plugin-react autoprefixer postcss tailwindcss typescript --save'
-
-[phases.build]
-cmd = 'npm run build'
-
 [start]
-cmd = 'npm run start'
+cmd = "node start.cjs"
+
+[variables]
+NODE_ENV = "production"
+
+[build]
+buildCommand = "echo 'No build needed - serving static files'"
+
+[install]
+installCommand = "npm install express"

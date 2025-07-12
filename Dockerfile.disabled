@@ -1,3 +1,7 @@
+# Dockerfile disabled to force Railway to use Nixpacks
+# Railway was failing with Alpine Linux build errors
+# Nixpacks provides better Node.js compatibility
+
 FROM node:18-alpine
 WORKDIR /app
 RUN apk add --no-cache curl
