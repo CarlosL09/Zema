@@ -1,0 +1,13 @@
+# Dockerfile disabled to force Railway to use Nixpacks
+# Railway was failing with Alpine Linux build errors
+# Nixpacks provides better Node.js compatibility
+
+FROM node:18-alpine
+WORKDIR /app
+RUN apk add --no-cache curl
+COPY package*.json ./
+RUN npm ci --production --silent
+COPY server/direct-production.cjs ./server.cjs
+EXPOSE 3000
+HEALTHCHECK --interval=10s --timeout=3s --start-period=30s --retries=3 CMD curl -f http://localhost:${PORT:-3000}/ || exit 1
+CMD ["node", "server.cjs"]
