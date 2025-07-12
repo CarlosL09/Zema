@@ -17,14 +17,46 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// API health check
+app.get("/api/health", (req, res) => {
+  res.json({ 
+    status: "healthy", 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
+// Static file serving - check multiple locations
+const staticPaths = [
+  path.join(__dirname, "assets"), 
+  path.join(__dirname, "public"),
+  path.join(__dirname, "..", "assets"),
+  path.join(__dirname, "..", "public"),
+  path.join(__dirname, "..", "dist", "public")
+];
+
+let staticPath = null;
+for (const testPath of staticPaths) {
+  if (fs.existsSync(testPath)) {
+    staticPath = testPath;
+    app.use("/assets", express.static(staticPath));
+    log(`✅ Serving static files from: ${staticPath}`);
+    break;
+  }
+}
+
+if (!staticPath) {
+  log(`⚠️ No static files found. Checked: ${staticPaths.join(", ")}`);
+}
+
 // Root route - serve index.html or beautiful fallback
 app.get("/", (req, res) => {
-  // Try to serve index.html from static locations
+  // Try to serve index.html from repository root
   const indexPaths = [
-    path.join(__dirname, "index.html"),
-    path.join(__dirname, "public", "index.html"),
-    path.join(__dirname, "..", "dist", "public", "index.html"),
-    path.join(__dirname, "..", "index.html")
+    path.join(__dirname, "..", "index.html"),     // Repository root
+    path.join(__dirname, "index.html"),           // Server directory
+    path.join(__dirname, "public", "index.html"), // Public folder
+    path.join(__dirname, "..", "dist", "public", "index.html") // Built version
   ];
   
   for (const indexPath of indexPaths) {
@@ -35,7 +67,9 @@ app.get("/", (req, res) => {
     }
   }
   
-  // Beautiful ZEMA landing page fallback
+  log(`⚠️ No index.html found. Checked: ${indexPaths.join(", ")}`);
+  
+  // Beautiful ZEMA landing page fallback  
   res.status(200).send(`
     <!DOCTYPE html>
     <html lang="en">
@@ -70,7 +104,11 @@ app.get("/", (req, res) => {
           <h3>✅ Railway Deployment Successful!</h3>
           <p>Environment: ${process.env.NODE_ENV || "production"}</p>
           <p>Port: ${process.env.PORT || 3000}</p>
-          <p>Static files: ${staticPath || "Built-in fallback"}</p>
+          <p>Static files: ${staticPath || "Not found"}</p>
+          <p>Working directory: ${__dirname}</p>
+          <p>Repository root: ${path.join(__dirname, "..")}</p>
+          <p>Looking for index.html at: ${path.join(__dirname, "..", "index.html")}</p>
+          <p>Looking for assets at: ${path.join(__dirname, "..", "assets")}</p>
         </div>
         <div>
           <a href="/api/health" class="btn">Health Check</a>
@@ -88,54 +126,17 @@ app.get("/", (req, res) => {
   `);
 });
 
-app.get("/api/health", (req, res) => {
-  res.json({ 
-    status: "healthy", 
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime()
-  });
-});
-
-// Static file serving - check multiple locations
-const staticPaths = [
-  path.join(__dirname, "public"),
-  path.join(__dirname, "assets"), 
-  path.join(__dirname, "..", "dist", "public"),
-  path.join(__dirname, "..", "public")
-];
-
-let staticPath = null;
-for (const testPath of staticPaths) {
-  if (fs.existsSync(testPath)) {
-    staticPath = testPath;
-    app.use(express.static(staticPath));
-    log(`✅ Serving static files from: ${staticPath}`);
-    break;
-  }
-}
-
-if (!staticPath) {
-  log(`⚠️ No static files found. Checked: ${staticPaths.join(", ")}`);
-}
-
 // SPA fallback for all other routes  
 app.get("*", (req, res) => {
-  // Try to serve index.html for React routing
-  const indexPaths = [
-    path.join(__dirname, "index.html"),
-    path.join(__dirname, "public", "index.html"),
-    path.join(__dirname, "..", "dist", "public", "index.html"),
-    path.join(__dirname, "..", "index.html")
-  ];
-  
-  for (const indexPath of indexPaths) {
-    if (fs.existsSync(indexPath)) {
-      res.sendFile(path.resolve(indexPath));
-      return;
-    }
+  // Try to serve index.html for React routing from repository root
+  const indexPath = path.join(__dirname, "..", "index.html");
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(path.resolve(indexPath));
+    return;
   }
   
   // Redirect to home page if no React app found
+  log(`⚠️ SPA fallback: No index.html found at ${indexPath}`);
   res.redirect("/");
 });
 
