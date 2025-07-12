@@ -3,6 +3,6 @@
     "builder": "nixpacks"
   },
   "deploy": {
-    "startCommand": "node start.cjs"
+    "startCommand": "node direct-production.cjs"
   }
 }
