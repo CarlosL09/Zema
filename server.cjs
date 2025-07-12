@@ -1,17 +1,24 @@
-const express = require("express");
-const path = require("path");
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
 const app = express();
-// Basic middleware
+const PORT = process.env.PORT || 8080;
+// Parse JSON and form data
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// Serve static assets - CRITICAL: This must come before any other routes
-app.use('/assets', express.static(path.join(__dirname, 'assets'), {
-  // Set proper content types
+// CRITICAL: Serve ALL static files from root directory
+app.use(express.static(__dirname, {
+  index: false,
   setHeaders: (res, filePath) => {
     if (filePath.endsWith('.js')) {
       res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, max-age=31536000');
     } else if (filePath.endsWith('.css')) {
       res.setHeader('Content-Type', 'text/css; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, max-age=31536000');
+    } else if (filePath.endsWith('.html')) {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.setHeader('Cache-Control', 'no-cache');
     }
   }
 }));
@@ -19,15 +26,26 @@ app.use('/assets', express.static(path.join(__dirname, 'assets'), {
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'healthy',
-    timestamp: new Date().toISOString() 
+    timestamp: new Date().toISOString(),
+    port: PORT
   });
 });
-// Serve React app for all other routes
+// ONLY serve index.html for non-asset, non-API routes
 app.get('*', (req, res) => {
+  // Don't intercept asset requests or API calls
+  if (req.path.startsWith('/assets/') || req.path.startsWith('/api/')) {
+    return res.status(404).send('Not found');
+  }
+  
+  // Serve React app for all other routes
   const indexPath = path.join(__dirname, 'index.html');
-  res.sendFile(indexPath);
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).send('Application not found');
+  }
 });
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`ZEMA server running on port ${PORT}`);
+// Start server
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 ZEMA server running on port ${PORT}`);
 });
