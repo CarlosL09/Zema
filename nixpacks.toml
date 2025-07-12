@@ -1,11 +1,11 @@
 [start]
-cmd = "node start.cjs"
+cmd = "node server.cjs"
 
 [variables]
 NODE_ENV = "production"
 
-[build]
-buildCommand = "echo 'No build needed - serving static files'"
+[phases.build]
+cmds = ["echo 'Static files ready'"]
 
-[install]
-installCommand = "npm install express"
+[phases.install]
+cmds = ["npm install --only=production"]
